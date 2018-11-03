@@ -1,0 +1,26 @@
+.u-hidden{
+    display:none;
+}
+
+.u-fadeout
+{
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s 1s, opacity 1s linear;
+} 
+
+.u-fadeOutDown {
+    -webkit-animation-name: fadeOutDown;
+    animation-name: fadeOutDown;
+ }
+
+ .u-center{
+
+    margin-left: auto;
+    margin-right: auto;
+ }
+
+ .u-margin{
+    margin-top:2rem;
+    margin-bottom: 2rem;
+ }

@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="@Url.Content("~/css/style.css")" rel="stylesheet" type="text/css" />
+
+    <title>Park&Ride</title>
+</head>
+
+<body>
+    <div class=c-container>
+        <header class="c-header">
+            <figure class="c-figure">
+
+            </figure>
+            <nav role=navigation class="c-navigation">
+                <ul id="id_menu" class="c-menu">
+                        <li id="home_nav" class="c-menu__item"><a data-language="home" class="c-menu__anchor" >Strona główna</a></li>
+                        <li id="news_nav" class="c-menu__item"><a data-language="news" class="c-menu__anchor">Aktualności</a></li>
+                        <li id="map_nav" class="c-menu__item"><a data-language="map" class="c-menu__anchor">Mapa Parkingów</a></li>
+                        <li id="contact_nav" class="c-menu__item"><a data-language="contact" class="c-menu__anchor">Kontakt</a></li>
+                        <li id="log_nav" class="c-menu__item"><a data-language="logIn" class="c-menu__anchor">Zaloguj</a></li>
+                    </ul>
+                
+            </nav>
+        </header>
+        @RenderBody()
+    </div>
+
+   
+</body>
+
+</html>

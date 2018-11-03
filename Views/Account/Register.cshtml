@@ -1,0 +1,31 @@
+﻿@model ParkAndRide.Models.Account;
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    <div class="container">
+       
+            <nav id="navigation" class="navigationPanel">
+                <div class="navigationContent c-container-1--6"><a class="navLink">Powrót</a></div>
+            </nav>
+
+                <section class="c-formular u-center">
+                    <form method="post" action="#" role="login" class="c-form">
+                        <div class="u-center">
+                            @Html.EditorFor(model => model.Login, new { htmlAttributes = new { @placeholder = "Login", @class = "c-input u-center" } })
+                            @Html.ValidationMessageFor(model => model.Login)
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @placeholder = "Hasło", @class = "c-input u-center" } })
+                            @Html.ValidationMessageFor(model => model.Password)
+                            <div class="pwstrength_viewport_progress"></div>
+                            <button type="submit" name="go" class="c-button u-center">Rejestruj</button>
+                        </div>
+                    </form>
+                </section>
+  
+    </div>
+}
+
+
