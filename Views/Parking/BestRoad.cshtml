@@ -7,7 +7,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="c-container">
-<div class="c-content__list c-container-7-10 u-center">
+    <div class="c-content__list c-container-7-10 u-center">
 
         <div class="c-content__list__elem c-content__list__elem--headerColor">
             <p class="c-content__list__column">Nazwa</p>
@@ -16,14 +16,16 @@
             <div class="c-content__list__column"></div>
 
         </div>
-        @{int i = 0;}
+        @{int i = 0;
+            List<ParkAndRide.Models.App.ParkingExtensions> tempModel = new List<ParkAndRide.Models.App.ParkingExtensions>(Model);
+            }
         @foreach (ParkAndRide.Models.App.ParkingExtensions item in Model)
         {
             <div class="c-content__list__elem c-content__list__elem--color">
                 <p class="c-content__list__column">@item.Name</p>
                 <p class="c-content__list__column">@(String.Format("{0}, {1}", item.Place, item.Street))</p>
                 <p class="c-content__list__column" data-duration="durationToUser">@item.DurationToUserPlace</p>
-                <button class="c-content__list__column c-button" button-marker="setMarker" id=@("button_"+i)>Wyznacz trasę</button>
+                <button class="c-content__list__column c-button" button-marker="road" id=@("button_"+i)>Wyznacz trasę</button>
 
             </div>
             i++;
@@ -31,91 +33,74 @@
 
         @using (Html.BeginForm("BestRoad", "Parking", FormMethod.Post))
         {
+            
             Model.Clear();
             Model.Add(new ParkAndRide.Models.App.ParkingExtensions());
-            @Html.HiddenFor(x => x[0].GpsLat, new { id = "lat" })
-            @Html.HiddenFor(x => x[0].GpsLng, new { id = "lng" })
+            @Html.HiddenFor(x => x[Model.Count-1].GpsLat, new { id = "lat" })
+            @Html.HiddenFor(x => x[Model.Count-1].GpsLng, new { id = "lng" })
 
             <button type="submit" name="go" class="c-button u-center">Proponowane parkingi</button>
         }
     </div>
-        <div id="map" class="map u-center"></div>
-    </div>
-
-    
-
-    <script>
-        var myGeoLocation;
-
-        (function getMapLocation() {
-
-            if (navigator.geolocation) {
-
-                navigator.geolocation.getCurrentPosition(showMapPosition);
-
-            } else {
-
-                map.innerHTML = "Mechanizm geolokacji jest niedostępny";
-
-            }
-
-        })()
-
-        function getGeoLoaction() {
-            return myGeoLocation;
-        }
+    <div id="map" class="map u-center"></div>
+</div>
 
 
+<script src="~/js/geolocation.js"></script>
+<script>
 
-        function showMapPosition(position) {
+    var map;
+    var markers = [];
 
-            const mapLatitude = position.coords.latitude;
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 52.229, lng: 21.011 },
+            zoom: 10
+        });
 
-            const mapLongitude = position.coords.longitude;
+  
 
-            myGeoLocation = { gpsLat: mapLatitude, gpsLng: mapLongitude, Name: 'Twoja lokalizacja' };
-            var latInput = document.getElementById("lat");
-            var lngInput = document.getElementById("lng");
-            if (latInput && lngInput) {
-                latInput.value = myGeoLocation.gpsLat;
-                lngInput.value = myGeoLocation.gpsLng;
+            @foreach(var item in tempModel)
+            {
 
-            }
+        <text>
+        var marker = createMarker({ gpsLat: @(item.GpsLat), gpsLng: @(item.GpsLng), Name: '@item.Name.ToString()' });
+            markers.push({
+            name: '@(item.Name)',
+            marker: marker,
+        });
 
-        }
+            marker.setMap(map);
+
+
+        </text>
+        } 
+
+        directionsServiceAdd("");
+    }
 
 
 
-        var map;
+    function createMarker(obj) {
+        var marker = new google.maps.Marker({
+            position: { lat: obj.gpsLat, lng: obj.gpsLng },
+        })
 
-        function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: 52.229, lng: 21.011 },
-                zoom: 10
-            });
-        }
+        var popUpMarker = new google.maps.InfoWindow({
+            content: '<h2>' + obj.Name + '</h2>'
+        });
 
+        marker.addListener('click', function () {
+            popUpMarker.open(map, marker);
+        });
 
+        return marker;
+    }
 
-        function createMarker(obj) {
-            var marker = new google.maps.Marker({
-                position: { lat: obj.gpsLat, lng: obj.gpsLng },
-            })
-
-            var popUpMarker = new google.maps.InfoWindow({
-                content: '<h2>' + obj.Name + '</h2>'
-            });
-
-            marker.addListener('click', function () {
-                popUpMarker.open(map, marker);
-            });
-
-            return marker;
-        }
-
-    </script>
-
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=@(apiConfig.Value.GoogleApiKey)&callback=initMap&libraries=places"
-            type="text/javascript"></script>
-    <script src="~/js/geolocation.js"></script>
-    <script src="~/js/Time.js"></script>
+    getMapLocation();
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=@(apiConfig.Value.GoogleApiKey)&callback=initMap&libraries=places"
+        type="text/javascript"></script>
+<script src="~/js/Time.js"></script>
+<script src="~/js/direction.js"></script>
+<script src="~/js/BestRoad.js"></script>

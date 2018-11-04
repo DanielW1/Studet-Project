@@ -3,3 +3,5 @@ ParkAndRide.csproj.user
 .vs/
 .vscode/
 *.sln
+bin
+obj

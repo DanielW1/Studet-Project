@@ -60,9 +60,8 @@ public class ParkingController : Controller
     {
         Location userLocation;
         List<ParkingExtensions> result;
-        if(parkings.Count == 1)
-        {
-            userLocation = new Location() {lat=parkings[0].GpsLat, lng = parkings[0].GpsLng };
+
+            userLocation = new Location() {lat=parkings[parkings.Count-1].GpsLat, lng = parkings[parkings.Count-1].GpsLng };
 
             var dbParkings = (from e in db.Parking select e).ToList();
 
@@ -70,11 +69,7 @@ public class ParkingController : Controller
 
             result = ParkingAction.bestParkings(exParkings, userLocation, 3,DistanceType.DURATION);
             
-        }
-        else
-        {
-            result = new List<ParkingExtensions>();
-        }
+  
         return View(result);
     }
 
