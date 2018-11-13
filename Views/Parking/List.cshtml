@@ -14,83 +14,75 @@
             <div class="c-content__list__column"></div>
 
         </div>
-        @{int i = 0; }
+        <div class="c-content__list-scroll">
+            @{int i = 0; }
 
-        @foreach (var item in Model)
-        {
+            @foreach (var item in Model)
+            {
 
 
-            <div class="c-content__list__elem">
-                <p class="c-content__list__column">@item.Name</p>
-                <p class="c-content__list__column">@(String.Format("{0}, {1}", item.Place, item.Street))</p>
-                <button class="c-content__list__column c-button" button-marker="setMarker" id=@("button_"+i)>Pokaż na mapie</button>
-                <div class="c-triangle" id=@("triangle" + i)></div>
-            </div>
-            <div id=@("info" + i) class="c-content__list__info u-hidden">
-                <div class="c-content__list__wraper">
-                    <div class="c-content__list__wraper__in">
-                        <p>Adres:</p>
-                        <p>@String.Format("{0} {1} {2}", item.Place, item.Street, item.Number)</p>
+                <div class="c-content__list__elem">
+                    <p class="c-content__list__column">@item.Name</p>
+                    <p class="c-content__list__column">@(String.Format("{0}, {1}", item.Place, item.Street))</p>
+                    <button class="c-content__list__column c-button" button-marker="setMarker" id=@("button_"+i)>Pokaż na mapie</button>
+                    <div class="c-triangle" id=@("triangle" + i)></div>
+                </div>
+                <div id=@("info" + i) class="c-content__list__info u-hidden">
+                    <div class="c-content__list__wraper">
+                        <div class="c-content__list__wraper__in">
+                            <p>Adres:</p>
+                            <p>@String.Format("{0} {1} {2}", item.Place, item.Street, item.Number)</p>
+                        </div>
+                        <div class="c-content__list__wraper__in">
+                            <p>Kod Pocztowy:</p>
+                            <p>@item.PostCode</p>
+                        </div>
+                        <div class="c-content__list__wraper__in">
+                            <p>Data utworzenia:</p>
+                            <p>@item.CreationDate</p>
+                        </div>
                     </div>
-                    <div class="c-content__list__wraper__in">
-                        <p>Kod Pocztowy:</p>
-                        <p>@item.PostCode</p>
-                    </div>
-                    <div class="c-content__list__wraper__in">
-                        <p>Data utworzenia:</p>
-                        <p>@item.CreationDate</p>
+                    <div class="c-content__list__wraper">
+                        <div class="c-content__list__wraper__in">
+                            <p>Liczba poziomów:</p>
+                            <p>@item.NumberOfFloor</p>
+                        </div>
+                        <div class="c-content__list__wraper__in">
+                            <p>Czy strzeżony?</p>
+                            <p>
+                                @if (item.Guarded == 1)
+                                {
+                                    String.Format("Tak");
+                                }
+                                else
+                                {
+                                    String.Format("Nie");
+
+                                }
+                            </p>
+                        </div>
+                        <div class="c-content__list__wraper__in">
+                            <p>Liczba miejsc:</p>
+                            <p>@item.NumberOfPlaces</p>
+                        </div>
                     </div>
                 </div>
-                <div class="c-content__list__wraper">
-                    <div class="c-content__list__wraper__in">
-                        <p>Liczba poziomów:</p>
-                        <p>@item.NumberOfFloor</p>
-                    </div>
-                    <div class="c-content__list__wraper__in">
-                        <p>Czy strzeżony?</p>
-                        <p>
-                            @if (item.Guarded == 1)
-                            {
-                                String.Format("Tak");
-                            }
-                            else
-                            {
-                                String.Format("Nie");
 
-                            }
-                        </p>
-                    </div>
-                    <div class="c-content__list__wraper__in">
-                        <p>Liczba miejsc:</p>
-                        <p>@item.NumberOfPlaces</p>
-                    </div>
-                </div>
+                i++;
+
+            }
             </div>
 
-            i++;
-
-        }
-
-    </div>
-        <button class="c-button" button-marker="setAll">Pokaż wszystkie</button>
+        </div>
+        <button class="c-button u-center" button-marker="setAll">Pokaż wszystkie</button>
     
     </div>
-<input type="text" placeholder="Enter localization" id="autocomplete" width="200" />
 <div id="map" class="map u-center"></div>
-<div id="map-panel" class="c-map_panel"></div>
 
 
 <script>
-    window.onload = function () {
-        initAutocomplete('autocomplete');
-        
-    }
-
-
-
     var map;
     var addMarkerFunc;
-    var myLatlng;
     var mapLatitude;
     var mapLongitude;
     var markers = [];
@@ -101,10 +93,6 @@
             center: { lat: 52.229, lng: 21.011 },
             zoom: 10
         });
-
-        directionsServiceAdd('.c-map_panel');
-        calculateAndDisplayRouteTransit({ lat: 52.27, lng: 20.97 }, { lat: 52.21, lng: 21.16 });
-        getMapLocation();
 
     @foreach (var item in Model)
         {
@@ -162,22 +150,14 @@
   
         return circle;
     }
-
-    function fillInfoWindow(marker) {
-
-    }
-
-    
    
 
 </script>
 <script src="~/js/List.js"></script>
 <script src="~/js/script.js"></script>
-<script src="~/js/direction.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=@(apiConfig.Value.GoogleApiKey)&callback=initMap&libraries=places"
         type="text/javascript"></script>
-<script src="~/js/googleMapsAutocomplete.js"></script>
-<script src="~/js/geolocation.js"></script>
+
 
 
     }

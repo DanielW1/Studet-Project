@@ -1,0 +1,32 @@
+﻿@model List<ParkAndRide.App.ActionModel.StatisticModel>
+
+@foreach(var item in Model)
+{
+    string result = "";
+    switch (item.DayOfWeek)
+    {
+        case 1:
+            result = "Niedziela";
+            break;
+        case 2:
+            result = "Poniedziałek";
+            break;
+        case 3:
+            result = "Wtorek";
+            break;
+        case 4:
+            result = "Środa";
+            break;
+        case 5:
+            result = "Czwartek";
+            break;
+        case 6:
+            result = "Piątek";
+            break;
+        case 7:
+            result = "Sobota";
+            break;
+    }
+    <p>@result</p>
+    <p>@item.AvgNumberOfFreePlaces</p>
+}

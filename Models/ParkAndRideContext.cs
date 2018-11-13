@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Web;
+using ParkAndRide.Models.App;
 
 namespace ParkAndRide.Models
 {
@@ -23,6 +24,7 @@ namespace ParkAndRide.Models
         public virtual DbSet<ParkingAdministrator> ParkingAdministrator { get; set; }
         public virtual DbSet<ParkingPlace> ParkingPlace { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<HistoricalState> HistoricalState { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -371,6 +373,20 @@ namespace ParkAndRide.Models
                     .HasColumnName("surname")
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+            });
+         
+            modelBuilder.Entity<HistoricalState>(entity =>
+            {
+                entity.Property(e => e.IdState).HasColumnName("id_state");
+
+                entity.Property(e => e.Name).HasColumnName("Name");
+
+                entity.Property(e => e.NumberOfFreePlace).HasColumnName("Number_of_free_places");
+
+                entity.Property(e => e.Date)
+                    .HasColumnName("date")
+                    .HasColumnType("datetime2");
 
             });
 

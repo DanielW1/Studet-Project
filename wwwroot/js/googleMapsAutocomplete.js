@@ -1,5 +1,9 @@
 ﻿var placeSearch, autocomplete;
 
+/*
+ * Funkcja dodaje funkcjonalność API Google Autocomplete do elementu którego ID wskazujemy w parametrze funkcji
+ * Domyślnie kręg poszukiwań zawężony do Warszawy - 'defaultBounds' możliwe rozszerzenie funkcji o podanie punktu zawężenia
+ * */
 function initAutocomplete(elemName) {
 
     var defaultBounds = new google.maps.LatLngBounds(
@@ -20,7 +24,6 @@ function initAutocomplete(elemName) {
             return;
         }
 
-        console.log(places);
     })
 }
 

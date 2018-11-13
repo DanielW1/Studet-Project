@@ -13,10 +13,6 @@ namespace ParkAndRide.App.ActionModel
     public class ParkingAction
     {
 
-        private static readonly IOptions<GoogleApiConfig> config;
-
-
-
         /*
          * Zwraca najlepsze parkingi dla użytkownika 
          **/

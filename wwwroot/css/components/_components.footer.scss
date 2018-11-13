@@ -1,0 +1,13 @@
+.c-footer{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+    color:$primaryColor;
+    background-color: $fontColor;
+    flex-direction: column;
+    &>p{
+        padding-top:1rem;
+    }
+}

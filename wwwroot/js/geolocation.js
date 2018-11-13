@@ -28,7 +28,7 @@ function getMapLocation() {
         map.innerHTML = "Mechanizm geolokacji jest niedostępny";
 
     }
-    console.log("geo");
+
 
 }
 

@@ -1,0 +1,28 @@
+.c-form{
+    display: flex;
+    flex-direction: column;
+    width:40%;
+    height: 90vh;
+    padding-top:2rem;
+    padding-bottom: 2rem;
+    
+    &-control{
+        margin-top:0.5rem;
+        margin-bottom: 1rem;
+        width:100%;
+        border: 0.5px solid $accentColor;
+        border-radius: 5px;
+        border-color: $accentColor;
+        color:$fontColor;
+        padding: 0.75rem 0;
+    }
+
+    &__label{
+        font-weight:bold;
+        color:$fontColor;
+    }
+
+    &-link{
+        padding: 1rem 0;
+    }
+}

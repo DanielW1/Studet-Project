@@ -9,6 +9,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ParkAndRide.Models;
+using Microsoft.AspNetCore.Identity;
+using ParkAndRide.Models.Config;
+using Hangfire;
+using ParkAndRide.App.Requests;
+using ParkAndRide.App.ActionModel;
 
 namespace ParkAndRide
 {
@@ -34,7 +39,7 @@ namespace ParkAndRide
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           
+            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("HangFireDatabase")));
 
             services.AddDistributedMemoryCache();
 
@@ -49,15 +54,57 @@ namespace ParkAndRide
             services.AddDbContext<ParkAndRideContext>
                 (options => options.UseSqlServer(Configuration.GetConnectionString("BloggingDatabase")));
 
+          /*  services.AddIdentity<Account, IdentityRole>()
+         .AddEntityFrameworkStores<ParkAndRideContext>()
+         .AddDefaultTokenProviders();*/
+
+
+            /*services.Configure<IdentityOptions>(options =>
+            {
+
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+
+
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.AllowedForNewUsers = true;
+
+
+
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = true;
+            });*/
+
+            services.ConfigureApplicationCookie(options =>
+            {
+
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
+
+
             services.AddOptions();
             services.Configure<GoogleApiConfig>(Configuration.GetSection("GoogleApiConfig"));
+            services.Configure<SMTPSession>(Configuration.GetSection("SMTPSession"));
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseHangfireServer();
+            app.UseHangfireDashboard();
 
+            RecurringJob.AddOrUpdate(() => BackgroundWorker.getCurrentDateFromParkAndRideApi(), Cron.MinuteInterval(15));
 
             if (env.IsDevelopment())
             {
@@ -71,6 +118,7 @@ namespace ParkAndRide
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseSession();
+           // app.UseAuthentication();
 
 
             app.UseMvc(routes =>

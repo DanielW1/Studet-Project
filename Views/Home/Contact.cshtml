@@ -1,17 +1,24 @@
-﻿@{
+﻿@model ParkAndRide.App.EMail.MailModel
+
+@{
     ViewData["Title"] = "Contact";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+<section class="c-form--section u-center">
+    <form method="post" action="#" class="c-form u-center">
+        <div class="u-center" style="width:60%">
+            <label class="c-form__label">Imię:</label>
+            <input asp-for="Name" type="text" name="name" placeholder="Imię" required class="c-form-control" />
+            <label class="c-form__label">Nazwisko:</label>
+            <input asp-for="Surname" type="text" name="surname" placeholder="Nazwisko" required class="c-form-control" />
+            <label class="c-form__label">Email:</label>
+            <input asp-for="Email" type="email" name="email" placeholder="Email" required class="c-form-control" />
 
-<address>
-    <strong>Support:</strong> <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+            <label class="c-form__label" for="comment">Wiadomość:</label>
+            <textarea asp-for="Message"class="c-form-control" rows="10" id="comment"></textarea>
+            <button type="submit" name="go" class="c-button u-center">Wyślij</button>
+        </div>
+
+    </form>
+</section>  

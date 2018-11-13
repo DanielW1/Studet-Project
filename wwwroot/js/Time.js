@@ -1,8 +1,4 @@
-﻿window.onload = function () {
-    setDurationField();
-}
-
-function setDurationField() {
+﻿function setDurationField() {
     const durationTimeItems = document.querySelectorAll('[data-duration="durationToUser"]');
 
     durationTimeItems.forEach((item) => {

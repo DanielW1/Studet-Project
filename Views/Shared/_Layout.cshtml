@@ -15,13 +15,17 @@
             </figure>
             <nav role=navigation class="c-navigation">
                 <ul id="id_menu" class="c-menu">
-                        <li id="home_nav" class="c-menu__item"><a data-language="home" class="c-menu__anchor" >Strona główna</a></li>                       
-                        <li id="log_nav" class="c-menu__item"><a data-language="logIn" class="c-menu__anchor">Konto</a></li>
-                    </ul>
-                
+                    <li id="home_nav" class="c-menu__item"><a data-language="home" class="c-menu__anchor u-link" href="~/">Strona główna</a></li>
+                    <li id="log_nav" class="c-menu__item"><a data-language="logIn" class="c-menu__anchor">Konto</a></li>
+                </ul>
+
             </nav>
         </header>
         @RenderBody()
     </div>
+    <footer class="c-footer" style="position:relative; bottom:0; width:100%">
+        <p>&copy; 2018 Daniel Wasilewski</p>
+        <p>Politechnika Warszawska</p>
+    </footer>
 </body>
 </html>

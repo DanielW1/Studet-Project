@@ -1,21 +1,24 @@
-﻿var directionsService;
-var directionsDisplay;
+﻿
+function DirectionService() {
+    this.directionsService = new google.maps.DirectionsService;
+    this.directionsDisplay = new google.maps.DirectionsRenderer;
+    this.directionsServiceAdd = directionsServiceAdd;
+    this.calculateAndDisplayRoute = calculateAndDisplayRoute;
+}
 
 
 function directionsServiceAdd(mapPanelclass) {
-     directionsService = new google.maps.DirectionsService;
-     directionsDisplay = new google.maps.DirectionsRenderer;
 
-    directionsDisplay.setMap(map);
+    this.directionsDisplay.setMap(map);
 
     if (mapPanelclass) {
-        directionsDisplay.setPanel(document.querySelector(mapPanelclass));
+        this.directionsDisplay.setPanel(document.querySelector(mapPanelclass));
     }
 
 }
 
 function calculateAndDisplayRoute( origin, destination, mode, date) {
-    directionsService.route({
+    this.directionsService.route({
         origin: origin,
         destination: destination,
         travelMode: google.maps.TravelMode[mode],
@@ -23,9 +26,9 @@ function calculateAndDisplayRoute( origin, destination, mode, date) {
         transitOptions: {
             departureTime: date
         }
-    }, function (response, status) {
+    }, (response, status)=> {
         if (status === 'OK') {
-            directionsDisplay.setDirections(response);
+            this.directionsDisplay.setDirections(response);
         } else {
             window.alert('Żądanie nie powiodło się: ' + status);
         }
@@ -33,13 +36,13 @@ function calculateAndDisplayRoute( origin, destination, mode, date) {
 }
 
 function calculateAndDisplayRouteDrive( origin, destination) {
-    calculateAndDisplayRoute( origin, destination, 'DRIVING', new Date());
+    this.calculateAndDisplayRoute( origin, destination, 'DRIVING', new Date());
 }
 
 function calculateAndDisplayRouteTransit(origin, destination ) {
-    calculateAndDisplayRoute(origin, destination, 'TRANSIT', new Date());
+    this.calculateAndDisplayRoute(origin, destination, 'TRANSIT', new Date());
 }
 
 function calculateAndDisplayRouteTransitTime(origin, destination, time) {
-    calculateAndDisplayRoute(origin, destination, 'TRANSIT', time);
+    this.calculateAndDisplayRoute(origin, destination, 'TRANSIT', time);
 }

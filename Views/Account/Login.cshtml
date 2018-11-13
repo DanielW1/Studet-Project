@@ -4,26 +4,25 @@
 }
 
 @using (Html.BeginForm()){
-	<div class="container"> 
-  
-  <nav id="navigation" class="navigationPanel">
- <div class="navigationContent c-container-1--6"><a class="navLink">Powrót</a></div>
-  </nav>
-   
-      <section class="c-formular u-center">
-          <form method="post" action="#" role="login" class="c-form">
 
-              @Html.EditorFor(model => model.Login, new { htmlAttributes = new { @placeholder = "Login", @class = "c-input u-center" } })
-              @Html.ValidationMessageFor(model => model.Login)
-              @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @placeholder = "Hasło", type = "password", @class = "c-input u-center" } })
-              @Html.ValidationMessageFor(model => model.Password)
-              <div class="pwstrength_viewport_progress"></div>
-              <button type="submit" name="go" class="c-button u-center">Zaloguj</button>
-              <div>
-                  <a href="~/Account/Register">Utwórz konto</a> lub <a href="#">Odzyskaj hasło</a>
-              </div>
-          </form>      
-      </section>       
-</div>
+
+    <section class="c-form--section u-center">
+        <form method="post" action="#" role="login" class="c-form u-center">
+            <div class="u-center" style="width:25%">
+                @Html.EditorFor(model => model.Login, new { htmlAttributes = new { @placeholder = "Login", @class = "c-form-control" } })
+                @Html.ValidationMessageFor(model => model.Login)
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @placeholder = "Hasło", type = "password", @class = "c-form-control" } })
+                @Html.ValidationMessageFor(model => model.Password)
+
+                <button type="submit" name="go" class="c-button u-center">Zaloguj</button>
+                <div class="c-form-link">
+
+                    <a href="~/Account/Register" class="u-link">Utwórz konto</a> lub <a href="#" class="u-link">Odzyskaj hasło</a>
+                </div>
+            </div>
+                
+        </form>
+    </section>
+
 		  
 }

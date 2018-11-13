@@ -7,12 +7,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="c-container">
-    <div class="c-content__list c-container-7-10 u-center">
+    <div class="c-content__list c-container-9-10 u-center">
 
         <div class="c-content__list__elem c-content__list__elem--headerColor">
             <p class="c-content__list__column">Nazwa</p>
             <p class="c-content__list__column">Miejsce</p>
             <p class="c-content__list__column">Szacowany czas dojazdu</p>
+            <p class="c-content__list__column">Liczba wolnych miejsc</p>
             <div class="c-content__list__column"></div>
 
         </div>
@@ -21,13 +22,14 @@
             }
         @foreach (ParkAndRide.Models.App.ParkingExtensions item in Model)
         {
-            <div class="c-content__list__elem c-content__list__elem--color">
-                <p class="c-content__list__column">@item.Name</p>
-                <p class="c-content__list__column">@(String.Format("{0}, {1}", item.Place, item.Street))</p>
-                <p class="c-content__list__column" data-duration="durationToUser">@item.DurationToUserPlace</p>
-                <button class="c-content__list__column c-button" button-marker="road" id=@("button_"+i)>Wyznacz trasę</button>
+        <div class="c-content__list__elem c-content__list__elem--color">
+            <p class="c-content__list__column">@item.Name</p>
+            <p class="c-content__list__column">@(String.Format("{0}, {1}", item.Place, item.Street))</p>
+            <p class="c-content__list__column" data-duration="durationToUser">@item.DurationToUserPlace</p>
+            <p class="c-content__list__column" data-freeplaces="freePlaces">@item.NumberOfFreePlaces</p>
+            <button class="c-content__list__column c-button" button-marker="road" id=@("button_"+i)>Wyznacz trasę</button>
 
-            </div>
+        </div>
             i++;
         }
 
@@ -42,15 +44,26 @@
             <button type="submit" name="go" class="c-button u-center">Proponowane parkingi</button>
         }
     </div>
-    <div id="map" class="map u-center"></div>
+    <div class="c-map__section">
+        <div class="c-map__section__search">
+            <input type="text" class="c-map__section__search--input u-center u-readonly" id="startParking" readonly />
+            <input type="text" class="c-map__section__search--input u-center" placeholder="Lokalizacja końcowa" id="autocompleteEnd" />
+            <button class="c-button u-margin u-center" id="designate">Wyznacz</button>
+            <div id="map-panel"></div>
+        </div>
+        <div id="map" class="c-map__section--map"></div>
+    </div>
 </div>
 
 
 <script src="~/js/geolocation.js"></script>
+<script src="~/js/TextFormat.js"></script>
 <script>
 
     var map;
     var markers = [];
+    var directionServiceDrive;
+    var directionServiceTransit;
 
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
@@ -66,8 +79,9 @@
         <text>
         var marker = createMarker({ gpsLat: @(item.GpsLat), gpsLng: @(item.GpsLng), Name: '@item.Name.ToString()' });
             markers.push({
-            name: '@(item.Name)',
+            name: razorNameAndFormat('@(item.Name.ToString())'),
             marker: marker,
+            duration:@item.DurationToUserPlace,
         });
 
             marker.setMap(map);
@@ -75,11 +89,7 @@
 
         </text>
         } 
-
-        directionsServiceAdd("");
     }
-
-
 
     function createMarker(obj) {
         var marker = new google.maps.Marker({
@@ -96,11 +106,27 @@
 
         return marker;
     }
-
+    
     getMapLocation();
+
 </script>
+<script src="~/js/direction.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=@(apiConfig.Value.GoogleApiKey)&callback=initMap&libraries=places"
         type="text/javascript"></script>
 <script src="~/js/Time.js"></script>
-<script src="~/js/direction.js"></script>
 <script src="~/js/BestRoad.js"></script>
+<script src="~/js/googleMapsAutocomplete.js"></script>
+<script>
+    window.onload = function () {
+        setDurationField();
+        initAutocomplete("autocompleteEnd");
+        directionServiceDrive = new DirectionService();
+        directionServiceTransit = new DirectionService();
+        directionServiceDrive.directionsServiceAdd("");
+        directionServiceTransit.directionsServiceAdd("#map-panel");
+    }
+
+
+</script>
+
+

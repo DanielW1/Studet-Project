@@ -18,19 +18,23 @@
             </figure>
             <nav role=navigation class="c-navigation">
                 <ul id="id_menu" class="c-menu">
-                        <li id="home_nav" class="c-menu__item"><a data-language="home" class="c-menu__anchor" >Strona główna</a></li>
-                        <li id="news_nav" class="c-menu__item"><a data-language="news" class="c-menu__anchor">Aktualności</a></li>
-                        <li id="map_nav" class="c-menu__item"><a data-language="map" class="c-menu__anchor">Mapa Parkingów</a></li>
-                        <li id="contact_nav" class="c-menu__item"><a data-language="contact" class="c-menu__anchor">Kontakt</a></li>
-                        <li id="log_nav" class="c-menu__item"><a data-language="logIn" class="c-menu__anchor">Zaloguj</a></li>
-                    </ul>
-                
+                    <li id="home_nav" class="c-menu__item"><a data-language="home" class="c-menu__anchor u-link" href="~/">Strona główna</a></li>
+                    <li id="news_nav" class="c-menu__item"><a data-language="news" class="c-menu__anchor u-link" href="">Aktualności</a></li>
+                    <li id="map_nav" class="c-menu__item"><a data-language="map" class="c-menu__anchor u-link">Mapa Parkingów</a></li>
+                    <li id="contact_nav" class="c-menu__item"><a data-language="contact" class="c-menu__anchor u-link" href="">Kontakt</a></li>
+                    <li id="log_nav" class="c-menu__item"><a data-language="logIn" class="c-menu__anchor u-link" href="~/Account/Login">Zaloguj</a></li>
+                </ul>
+
             </nav>
         </header>
         @RenderBody()
     </div>
+    <footer class="c-footer">
+        <p>&copy; 2018 Daniel Wasilewski</p>
+        <p>Politechnika Warszawska</p>
+    </footer>
 
-   
+    <script src="~/js/slider.js"></script>
 </body>
 
 </html>

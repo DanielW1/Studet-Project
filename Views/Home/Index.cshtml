@@ -1,5 +1,106 @@
-﻿@{
-    Layout="~/Views/Shared/_LayoutMain.cshtml";
+﻿@using Microsoft.Extensions.Options
+@model List<ParkAndRide.Models.App.ParkingExtensions>
+@inject IOptions<GoogleApiConfig> apiConfig
+@{
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
-<div>terefere</div>
-@ViewBag.Title
+
+<section class="c-hero" id="hero">
+    <div id="arrow-left" class="c-hero__arrow c-hero__arrow--left"></div>
+    <div id="slider" class="c-hero__elem">
+        <div class="c-hero__slide c-hero__slide--edge slide1">
+            <div class="c-hero__content">
+
+            </div>
+        </div>
+        <div class="c-hero__slide c-hero__slide--main slide2">
+            <div class="c-hero__content"></div>
+        </div>
+        <div class="c-hero__slide c-hero__slide--edge slide3">
+            <div class="c-hero__content"></div>
+        </div>
+    </div>
+    <div id="arrow-right" class="c-hero__arrow c-hero__arrow--right"></div>
+</section>
+
+<section id="news-section" class="c-content__section--padding">
+    <h2>Aktualnosci</h2>
+    <div class="c-content__news">
+
+    </div>
+</section>
+<section id="map-section" class="c-content__section--padding">
+    <h2>Parkingi</h2>
+    <div id="map" class="map u-center"></div>
+</section>
+<section id="contact-section" class="c-content__contact c-content__section--padding c-content__section--effect">
+    <h2>Kontakt</h2>
+    <div class="c-content__contact__list">
+        <div class="c-content__contact__list--elem">
+            <p>Imię Nazwisko</p>
+            <p> Numer telefonu:</p>
+            <p>Adres email:</p>
+        </div>
+        <div class="c-content__contact__list--elem">
+            <p>Daniel Wasilewski</p>
+            <p>600700800</p>
+            <p>daniel.wasilewski01@gmail.com</p>
+        </div>
+    </div>
+    <button class="c-button u-center" type="button" onclick="location.href='/Home/Contact'">Napisz do nas</button>
+</section>
+
+
+<script>
+    var map;
+    var addMarkerFunc;
+    var mapLatitude;
+    var mapLongitude;
+    var markers = [];
+
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 52.229, lng: 21.011 },
+            zoom: 10
+        });
+
+    @foreach (var item in Model)
+        {
+
+        <text>
+        var marker = createMarker({ gpsLat: @(item.GpsLat), gpsLng: @(item.GpsLng), Name: '@item.Name.ToString()' });
+        markers.push({
+            name: '@(item.Name)',
+            marker: marker,
+        });
+
+        marker.setMap(map);
+
+
+        </text>
+        }
+
+
+    }
+
+    function createMarker(obj) {
+        var marker = new google.maps.Marker({
+            position: { lat: obj.gpsLat, lng: obj.gpsLng },
+        })
+
+        var popUpMarker = new google.maps.InfoWindow({
+            content: '<h2>' + obj.Name + '</h2>'
+        });
+
+        marker.addListener('click', function () {
+            popUpMarker.open(map, marker);
+        });
+
+        return marker;
+    }
+
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=@(apiConfig.Value.GoogleApiKey)&callback=initMap&libraries=places"
+        type="text/javascript"></script>

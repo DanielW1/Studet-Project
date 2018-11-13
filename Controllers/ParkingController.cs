@@ -11,6 +11,9 @@ using ParkAndRide.Models.App;
 using ParkAndRide.App.Requests;
 using ParkAndRide.App.Utilities;
 using ParkAndRide.App.ConfigureJSON;
+using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
+using Newtonsoft.Json;
 
 public class ParkingController : Controller
 {
@@ -63,14 +66,66 @@ public class ParkingController : Controller
 
             userLocation = new Location() {lat=parkings[parkings.Count-1].GpsLat, lng = parkings[parkings.Count-1].GpsLng };
 
+        if (userLocation.lat != null && userLocation.lat != "" &&
+            userLocation.lng != null && userLocation.lng != "")
+        {
             var dbParkings = (from e in db.Parking select e).ToList();
 
             List<ParkingExtensions> exParkings = ParkingExtensions.takeParkingExtensionsWithNumberPlaces(dbParkings);
 
-            result = ParkingAction.bestParkings(exParkings, userLocation, 3,DistanceType.DURATION);
-            
+            result = ParkingAction.bestParkings(exParkings, userLocation, 3, DistanceType.DURATION);
+        }
+        else
+        {
+            result = new List<ParkingExtensions>();
+        }
   
         return View(result);
+    }
+
+    public async Task<IActionResult> Statistic(string name)
+    {
+        List<StatisticModel> statistics = new List<StatisticModel>();
+        var conn = db.Database.GetDbConnection();
+        string result = null;
+        try
+        {
+            await conn.OpenAsync();
+            using (var command = conn.CreateCommand())
+            {
+                string query = "SELECT * FROM FN_free_places_statistic('P+R Metro M³ociny')";
+                command.CommandText = query;
+                DbDataReader reader = await command.ExecuteReaderAsync();
+
+                if (reader.HasRows)
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        result = reader.ToString();
+
+                        statistics.Add(new StatisticModel()
+                        {
+                            DayOfWeek = reader.GetInt32(0),
+                            Hour = reader.GetInt32(1),
+                            Minutes = reader.GetInt32(2),
+                            AvgNumberOfFreePlaces = reader.GetInt32(3)
+                        });
+
+                        //var r = Serialize(reader);
+                      //  var json = JsonConvert.DeserializeObject(reader.ToString());
+                        Console.WriteLine();
+
+                    }
+                }
+                reader.Dispose();
+            }
+        }
+        finally
+        {
+            conn.Close();
+        }
+        return View(statistics);
+
     }
 
     public IActionResult About()

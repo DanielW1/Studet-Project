@@ -19,6 +19,7 @@ namespace ParkAndRide.Models.App
             
         }
         public int NumberOfPlaces { get; set; }
+        public int NumberOfFreePlaces { get; set; }
         public int DurationToUserPlace { get; set; }
         public int DistanceToUserPlace { get; set; }
 
@@ -30,7 +31,10 @@ namespace ParkAndRide.Models.App
                 var parkingExtension = (from e in db.ParkingPlace
                                         group e by e.ParkingId
                                    into newgroup
-                                        select new { key = newgroup.Key, number = newgroup.Count() }).ToList();           
+                                        select new { key = newgroup.Key, number = newgroup.Count() }).ToList();
+
+            var freeParkingPlaces = ParkAndRideApiClient.GetAllParkAndRideApiAsync().Result;
+
 
             List<ParkingExtensions> exPark = new List<ParkingExtensions>();
             foreach (Parking park in parking)
@@ -39,6 +43,9 @@ namespace ParkAndRide.Models.App
                 ParkingExtensions exParking;
                 exParking = obj != null ? new ParkingExtensions(park) { NumberOfPlaces = obj.number } : new ParkingExtensions(park);
 
+                var result = freeParkingPlaces.Find(x => x.Name == park.Name);
+
+                exParking.NumberOfFreePlaces = result.NumberOfFreePlace;
                 exPark.Add(exParking);
 
             }
