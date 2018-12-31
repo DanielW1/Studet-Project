@@ -9,3 +9,4 @@ B:\Inzynierka\ParkAndRide\obj\Release\netcoreapp2.0\ParkAndRide.AssemblyInfoInpu
 B:\Inzynierka\ParkAndRide\obj\Release\netcoreapp2.0\ParkAndRide.AssemblyInfo.cs
 B:\Inzynierka\ParkAndRide\obj\Release\netcoreapp2.0\ParkAndRide.dll
 B:\Inzynierka\ParkAndRide\obj\Release\netcoreapp2.0\ParkAndRide.pdb
+B:\Inzynierka\ParkAndRide\obj\Release\netcoreapp2.0\UserSecretsAssemblyInfo.cs

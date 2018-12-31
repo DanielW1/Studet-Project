@@ -1,32 +1,247 @@
-﻿@model List<ParkAndRide.App.ActionModel.StatisticModel>
+﻿@model List<List<ParkAndRide.App.ActionModel.StatisticModel>>
 
-@foreach(var item in Model)
-{
-    string result = "";
-    switch (item.DayOfWeek)
-    {
-        case 1:
-            result = "Niedziela";
-            break;
-        case 2:
-            result = "Poniedziałek";
-            break;
-        case 3:
-            result = "Wtorek";
-            break;
-        case 4:
-            result = "Środa";
-            break;
-        case 5:
-            result = "Czwartek";
-            break;
-        case 6:
-            result = "Piątek";
-            break;
-        case 7:
-            result = "Sobota";
-            break;
-    }
-    <p>@result</p>
-    <p>@item.AvgNumberOfFreePlaces</p>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<h1 >@ViewBag.Name</h1>
+<div class="c-tab--container">
+    <div class="c-tab--link c-tab--link--selected" id="generalStatisticLink">Statystyki generalne</div>
+    <div class="c-tab--link" id="latWeekStatisticLink">Poprzedni tydzień</div>
+    <div class="c-tab--link" id="yearAgoStatisticList">Rok wstecz</div>
+</div>
+
+<div class="c-tab--content" id="generalStatistic">
+    <div class="c-tab--column" data-day="1">
+        <div class="c-tab--column--header">Niedziela</div>
+        <div class="c-tab--column--container">
+            <div class="c-tab--column--field" data-time="1">
+                <div>Godzina</div>
+            </div>
+            <div class="c-tab--column--field" data-value="1">
+                <div>Miejsca</div>
+            </div>
+        </div>
+    </div>
+    <div class="c-tab--column" data-day="2">
+        <div class="c-tab--column--header">Poniedziałek</div>
+        <div class="c-tab--column--container">
+            <div class="c-tab--column--field" data-time="2">
+                <div>Godzina</div>
+            </div>
+            <div class="c-tab--column--field" data-value="2">
+                <div>Miejsca</div>
+            </div>
+        </div>
+    </div>
+    <div class="c-tab--column" data-day="3">
+        <div class="c-tab--column--header">Wtorek</div>
+        <div class="c-tab--column--container">
+            <div class="c-tab--column--field" data-time="3">
+                <div>Godzina</div>
+            </div>
+            <div class="c-tab--column--field" data-value="3">
+                <div>Miejsca</div>
+            </div>
+        </div>
+    </div>
+    <div class="c-tab--column" data-day="4">
+        <div class="c-tab--column--header">Środa</div>
+        <div class="c-tab--column--container">
+            <div class="c-tab--column--field" data-time="4">
+                <div>Godzina</div>
+            </div>
+            <div class="c-tab--column--field" data-value="4">
+                <div>Miejsca</div>
+            </div>
+        </div>
+    </div>
+    <div class="c-tab--column" data-day="5">
+        <div class="c-tab--column--header">Czwartek</div>
+        <div class="c-tab--column--container">
+            <div class="c-tab--column--field" data-time="5">
+                <div>Godzina</div>
+            </div>
+            <div class="c-tab--column--field" data-value="5">
+                <div>Miejsca</div>
+            </div>
+        </div>
+    </div>
+    <div class="c-tab--column" data-day="6">
+        <div class="c-tab--column--header">Piątek</div>
+        <div class="c-tab--column--container">
+            <div class="c-tab--column--field" data-time="6">
+                <div>Godzina</div>
+            </div>
+            <div class="c-tab--column--field" data-value="6">
+                <div>Miejsca</div>
+            </div>
+        </div>
+    </div>
+    <div class="c-tab--column" data-day="7">
+        <div class="c-tab--column--header">Sobota</div>
+        <div class="c-tab--column--container">
+            <div class="c-tab--column--field" data-time="7">
+                <div>Godzina</div>
+            </div>
+            <div class="c-tab--column--field" data-value="7">
+                <div>Miejsca</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="c-tab--content u-hidden" id="lastWeekStatistic">
+    <div class="c-tab--column" data-day="1">
+        <div class="c-tab--column--header">Niedziela</div>
+        <div class="c-tab--column--container">
+            <div class="c-tab--column--field" data-time-week="1">
+                <div>Godzina</div>
+            </div>
+            <div class="c-tab--column--field" data-value-week="1">
+                <div>Miejsca</div>
+            </div>
+        </div>
+    </div>
+    <div class="c-tab--column" data-day="2">
+        <div class="c-tab--column--header">Poniedziałek</div>
+        <div class="c-tab--column--container">
+            <div class="c-tab--column--field" data-time-week="2">
+                <div>Godzina</div>
+            </div>
+            <div class="c-tab--column--field" data-value-week="2">
+                <div>Miejsca</div>
+            </div>
+        </div>
+    </div>
+    <div class="c-tab--column" data-day="3">
+        <div class="c-tab--column--header">Wtorek</div>
+        <div class="c-tab--column--container">
+            <div class="c-tab--column--field" data-time-week="3">
+                <div>Godzina</div>
+            </div>
+            <div class="c-tab--column--field" data-value-week="3">
+                <div>Miejsca</div>
+            </div>
+        </div>
+    </div>
+    <div class="c-tab--column" data-day="4">
+        <div class="c-tab--column--header">Środa</div>
+        <div class="c-tab--column--container">
+            <div class="c-tab--column--field" data-time-week="4">
+                <div>Godzina</div>
+            </div>
+            <div class="c-tab--column--field" data-value-week="4">
+                <div>Miejsca</div>
+            </div>
+        </div>
+    </div>
+    <div class="c-tab--column" data-day="5">
+        <div class="c-tab--column--header">Czwartek</div>
+        <div class="c-tab--column--container">
+            <div class="c-tab--column--field" data-time-week="5">
+                <div>Godzina</div>
+            </div>
+            <div class="c-tab--column--field" data-value-week="5">
+                <div>Miejsca</div>
+            </div>
+        </div>
+    </div>
+    <div class="c-tab--column" data-day="6">
+        <div class="c-tab--column--header">Piątek</div>
+        <div class="c-tab--column--container">
+            <div class="c-tab--column--field" data-time-week="6">
+                <div>Godzina</div>
+            </div>
+            <div class="c-tab--column--field" data-value-week="6">
+                <div>Miejsca</div>
+            </div>
+        </div>
+    </div>
+    <div class="c-tab--column" data-day="7">
+        <div class="c-tab--column--header">Sobota</div>
+        <div class="c-tab--column--container">
+            <div class="c-tab--column--field" data-time-week="7">
+                <div>Godzina</div>
+            </div>
+            <div class="c-tab--column--field" data-value-week="7">
+                <div>Miejsca</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="c-tab--content u-hidden" id="yearAgoStatistic"></div>
+
+<script src="~/js/Statistics.js"></script>
+<script src="~/js/Time.js"></script>
+    <script>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+        @foreach (var elem in Model[@i])
+        {
+            switch (elem.DayOfWeek)
+            {
+                case 1:
+                    <text>
+                    appendDataToCorrectColumn("@elem.Hour", "@elem.Minutes", "@elem.AvgNumberOfFreePlaces", 1, @i);
+
+                    </text>
+                    break;
+                case 2:
+                    <text>
+                    appendDataToCorrectColumn("@elem.Hour", "@elem.Minutes", "@elem.AvgNumberOfFreePlaces", 2, @i);
+
+                    </text>
+                    break;
+                case 3:
+                    <text>
+                    appendDataToCorrectColumn("@elem.Hour", "@elem.Minutes", "@elem.AvgNumberOfFreePlaces", 3, @i);
+
+                    </text>
+                    break;
+                case 4:
+                    <text>
+                    appendDataToCorrectColumn("@elem.Hour", "@elem.Minutes", "@elem.AvgNumberOfFreePlaces", 4, @i);
+
+                    </text>
+                    break;
+                case 5:
+                    <text>
+                    appendDataToCorrectColumn("@elem.Hour", "@elem.Minutes", "@elem.AvgNumberOfFreePlaces", 5, @i);
+
+                    </text>
+                    break;
+                case 6:
+                    <text>
+                    appendDataToCorrectColumn("@elem.Hour", "@elem.Minutes", "@elem.AvgNumberOfFreePlaces", 6, @i);
+
+                    </text>
+                    break;
+                case 7:
+                    <text>
+                    appendDataToCorrectColumn("@elem.Hour", "@elem.Minutes", "@elem.AvgNumberOfFreePlaces", 7, @i);
+
+                    </text>
+                    break;
+            }
+
+        }
+                    }
+                    //Funkcja tworzy elementy drzewa dom i wstawia je do odpowiednich column w zależności od dnia tygodnia, 
+                    //który przekazywany jest jako parametr
+                    function appendDataToCorrectColumn(...args) {
+                        const domElemTime = document.createElement('div');
+                        domElemTime.innerHTML = styleTimeHourMinute(args[0], args[1]);
+                        const domElemValue = document.createElement('div');
+                        domElemValue.innerHTML = args[2];
+                        if (args[4] === 0) {
+                            document.querySelector(`[data-time='${args[3]}']`).appendChild(domElemTime);
+                    document.querySelector(`[data-value='${args[3]}']`).appendChild(domElemValue);
+                } else if (args[4] === 1) {
+                document.querySelector(`[data-time-week='${args[3]}']`).appendChild(domElemTime);
+                document.querySelector(`[data-value-week='${args[3]}']`).appendChild(domElemValue);
+            } else {
+
+            }
+        }
+    </script>
+
+

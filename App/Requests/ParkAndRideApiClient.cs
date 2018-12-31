@@ -14,7 +14,7 @@ namespace ParkAndRide.App.Requests
         public static async Task<int> GetParkAndRideApiAsync()
         {
             string result = "";
-            string path = "https://localhost:44380/api/Parking/getNumberOfFreePlaces/";
+            string path = "https://parkandrideapi.azurewebsites.net/api/Parking/getNumberOfFreePlaces/";
             try
             {
                 HttpResponseMessage response = await client.GetAsync(path);
@@ -36,7 +36,7 @@ namespace ParkAndRide.App.Requests
         {
             string result = "";
             List<HistoricalState> parkings = null;
-            string path = "https://localhost:44380/api/AllParking";
+            string path = "https://parkandrideapi.azurewebsites.net/api/AllParking";
             try
             {
                 HttpResponseMessage response = await client.GetAsync(path);

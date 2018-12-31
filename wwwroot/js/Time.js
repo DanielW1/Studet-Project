@@ -13,3 +13,10 @@ function changeSecoundOnStringTime(value) {
 
     return `${hours}h ${minutes}min`;
 }
+
+function styleTimeHourMinute(hour, minute) {
+    const rhours = parseInt(hour) < 10 ? '0' + hour : hour.toString();
+    const rminutes = parseInt(minute) < 10 ? '0' + minute : minute.toString();
+
+    return rhours + ':' + rminutes;
+}

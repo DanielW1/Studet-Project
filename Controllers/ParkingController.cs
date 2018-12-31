@@ -14,6 +14,7 @@ using ParkAndRide.App.ConfigureJSON;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
 using Newtonsoft.Json;
+using ParkAndRide.App.DBFunction;
 
 public class ParkingController : Controller
 {
@@ -42,11 +43,17 @@ public class ParkingController : Controller
         return View(exParkings);
     }
 
-    public IEnumerable<ParkingExtensions> mobileList()
+    public IEnumerable<ParkingExtensions> MobileList()
     {
 
-        var parkings = ((from e in db.Parking select e)).ToList();
+        var parkings = (from e in db.Parking select e).ToList();
+
         List<ParkingExtensions> exParkings = ParkingExtensions.takeParkingExtensionsWithNumberPlaces(parkings);
+
+        string origin = String.Format("{0},{1}", parkings[0].GpsLat, parkings[0].GpsLng);
+        string destination = String.Format("{0},{1}", parkings[1].GpsLat, parkings[1].GpsLng);
+
+        var temp = GoogleMapsClient.GetDistanceMatrixAsync(origin, destination, config.Value.GoogleApiKey).Result;
 
         return exParkings;
     }
@@ -83,48 +90,43 @@ public class ParkingController : Controller
         return View(result);
     }
 
-    public async Task<IActionResult> Statistic(string name)
+    [HttpGet]
+    public IEnumerable<ParkingExtensions> MobileBestRoad(float gpsLat, float gpsLng)
     {
-        List<StatisticModel> statistics = new List<StatisticModel>();
-        var conn = db.Database.GetDbConnection();
-        string result = null;
-        try
+        Location userLocation;
+        List<ParkingExtensions> result;
+
+        userLocation = new Location() { lat = gpsLat.ToString(), lng = gpsLng.ToString() };
+
+        if (userLocation.lat != null && userLocation.lat != "" &&
+            userLocation.lng != null && userLocation.lng != "")
         {
-            await conn.OpenAsync();
-            using (var command = conn.CreateCommand())
-            {
-                string query = "SELECT * FROM FN_free_places_statistic('P+R Metro M³ociny')";
-                command.CommandText = query;
-                DbDataReader reader = await command.ExecuteReaderAsync();
+            var dbParkings = (from e in db.Parking select e).ToList();
 
-                if (reader.HasRows)
-                {
-                    while (await reader.ReadAsync())
-                    {
-                        result = reader.ToString();
+            List<ParkingExtensions> exParkings = ParkingExtensions.takeParkingExtensionsWithNumberPlaces(dbParkings);
 
-                        statistics.Add(new StatisticModel()
-                        {
-                            DayOfWeek = reader.GetInt32(0),
-                            Hour = reader.GetInt32(1),
-                            Minutes = reader.GetInt32(2),
-                            AvgNumberOfFreePlaces = reader.GetInt32(3)
-                        });
-
-                        //var r = Serialize(reader);
-                      //  var json = JsonConvert.DeserializeObject(reader.ToString());
-                        Console.WriteLine();
-
-                    }
-                }
-                reader.Dispose();
-            }
+            result = ParkingAction.bestParkings(exParkings, userLocation, 3, DistanceType.DURATION);
         }
-        finally
+        else
         {
-            conn.Close();
+            result = new List<ParkingExtensions>();
         }
-        return View(statistics);
+
+        return result;
+    }
+
+    public async Task<IActionResult> Statistic(int id)
+    {
+        string query = String.Format("SELECT * FROM FN_free_places_statistic({0})",id);
+        string query2 = String.Format("SELECT * FROM FN_free_places_statistic_last_week({0})", id);
+        List<StatisticModel> statistics =  await DBRequest.getStatisticsModel(query);
+        List<StatisticModel> statisticsLastWeek =  await DBRequest.getStatisticsModel(query2);
+
+        List<List<StatisticModel>> result = new List<List<StatisticModel>>();
+        result.Add(statistics);
+        result.Add(statisticsLastWeek);
+
+        return View(result);
 
     }
 

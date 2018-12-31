@@ -152,3 +152,56 @@
     }
 }
 
+.c-tab--link{
+    flex-basis: 1;
+    width:100%;
+    padding:1rem 0rem;
+    text-align: center;
+    &:hover{
+        cursor: pointer;
+        background-color: $backgroundColor2;
+    }
+    &--selected{
+        background-color: $backgroundColor2;
+    }
+}
+
+.c-tab--container{
+    display:flex;
+    width:100%;
+    background-color: $backgroundColor1;
+    color:$primaryColor;
+}
+
+.c-tab--content{
+    display:flex;
+    width:100%;
+}
+
+.c-tab--column{
+    flex-basis: 1;
+    width: 100%;
+    &--header{
+        text-align: center;
+        color: $primaryColor;
+        background-color: $fontColor;
+        border-left:1px solid $primaryColor;
+    }
+    &--container{
+        display:flex;
+        width:100%;
+        border:1px solid $fontColor;
+    }
+    &--field{
+        flex-basis: 1;
+        width:100%;
+        text-align: center;
+        border-right: 1px solid $accentColor;
+        
+        & div{
+            border-bottom: 1px solid $accentColor;
+        }
+    }
+}
+
+

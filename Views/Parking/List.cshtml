@@ -24,7 +24,7 @@
                 <div class="c-content__list__elem">
                     <p class="c-content__list__column">@item.Name</p>
                     <p class="c-content__list__column">@(String.Format("{0}, {1}", item.Place, item.Street))</p>
-                    <button class="c-content__list__column c-button" button-marker="setMarker" id=@("button_"+i)>Pokaż na mapie</button>
+                    <button class="c-content__list__column c-button" button-marker="setMarker" id=@("button_" + i)>Pokaż na mapie</button>
                     <div class="c-triangle" id=@("triangle" + i)></div>
                 </div>
                 <div id=@("info" + i) class="c-content__list__info u-hidden">
@@ -66,6 +66,7 @@
                             <p>@item.NumberOfPlaces</p>
                         </div>
                     </div>
+                    <a class="c-content__list__column c-button u-link" href=@String.Format("/Parking/Statistic/{0}", item.ParkingId)> Statystyki</a>
                 </div>
 
                 i++;

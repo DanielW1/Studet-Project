@@ -20,3 +20,4 @@ B:\Inzynierka\ParkAndRide\obj\Debug\netcoreapp2.0\ParkAndRide.AssemblyInfo.cs
 B:\Inzynierka\ParkAndRide\obj\Debug\netcoreapp2.0\ParkAndRide.dll
 B:\Inzynierka\ParkAndRide\obj\Debug\netcoreapp2.0\ParkAndRide.pdb
 B:\Inzynierka\ParkAndRide\obj\Debug\netcoreapp2.0\ParkAndRide.csprojAssemblyReference.cache
+B:\Inzynierka\ParkAndRide\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs

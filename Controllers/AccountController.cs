@@ -5,8 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ParkAndRide.Models;
+using Newtonsoft.Json;
 using System.Web;
-
+using System.IO;
 
 namespace ParkAndRide.Controllers
 {
@@ -58,6 +59,44 @@ namespace ParkAndRide.Controllers
             }
             return View();
         }
+
+
+        [HttpPost]
+        public  IActionResult Post()
+        {
+            Account account = null;
+            try
+            {
+                
+                using (StreamReader reader = new StreamReader(Request.Body, System.Text.Encoding.UTF8))
+                {
+                    string res = reader.ReadToEndAsync().Result;
+                    account = JsonConvert.DeserializeObject<Account>(res);
+
+                    using (ParkAndRideContext db = new ParkAndRideContext())
+                    {
+                        db.Account.Add(account);
+                        db.SaveChanges();
+                    }
+                    ModelState.Clear();
+
+                }
+            }catch(Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                return StatusCode(409);
+            }
+            catch (JsonReaderException)
+            {
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+
+            }
+            return Created("",account);
+        }
+
 
         public IActionResult LoggedIn(){
 
