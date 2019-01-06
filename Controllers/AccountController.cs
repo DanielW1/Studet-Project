@@ -8,6 +8,7 @@ using ParkAndRide.Models;
 using Newtonsoft.Json;
 using System.Web;
 using System.IO;
+using Microsoft.EntityFrameworkCore;
 
 namespace ParkAndRide.Controllers
 {
@@ -71,14 +72,27 @@ namespace ParkAndRide.Controllers
                 using (StreamReader reader = new StreamReader(Request.Body, System.Text.Encoding.UTF8))
                 {
                     string res = reader.ReadToEndAsync().Result;
-                    account = JsonConvert.DeserializeObject<Account>(res);
+                    var user = JsonConvert.DeserializeObject<User>(res);
+                    user.EMail = "";
+                    user.Sex = "";
+                    user.Birthday = DateTime.Now;
+                    user.Place = "Warszawa";
+                    user.Street = "Puchatka";
+                    user.NumberOfBuilding = "1";
+                    user.NumberOfFlat = "1";
+                    user.PostCode = "00-640";
+                    user.Phone = "801802803";
 
-                    using (ParkAndRideContext db = new ParkAndRideContext())
-                    {
-                        db.Account.Add(account);
-                        db.SaveChanges();
-                    }
-                    ModelState.Clear();
+                   account = JsonConvert.DeserializeObject<Account>(res);
+                    account.CreationDate = DateTime.Now;
+
+                        using (ParkAndRideContext db = new ParkAndRideContext())
+                        {
+                            account.User = user;
+                            db.Account.Add(account);
+                            db.SaveChanges();
+                        }
+                        ModelState.Clear();
 
                 }
             }catch(Microsoft.EntityFrameworkCore.DbUpdateException e)
@@ -97,6 +111,74 @@ namespace ParkAndRide.Controllers
             return Created("",account);
         }
 
+        [HttpPost]
+        public IActionResult mobileLogin()
+        {
+            Account account = null;
+            try
+            {
+                using (StreamReader reader = new StreamReader(Request.Body, System.Text.Encoding.UTF8))
+                {
+                    string res = reader.ReadToEndAsync().Result;
+                    account = JsonConvert.DeserializeObject<Account>(res);
+
+                    var usr = db.Account.Include(d => d.User).
+                        Where(u => u.Login == account.Login && u.Password == account.Password).FirstOrDefault();
+
+                    if (usr != null)
+                        return Ok(usr);
+                    else
+                        return Unauthorized();
+                }
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                return BadRequest("Wrong body contains");
+            }
+            catch (JsonReaderException)
+            {
+                return BadRequest("Wrong body contains");
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPut]
+        public IActionResult mobilePut()
+        {
+            Account account = null;
+            try
+            {
+                using (StreamReader reader = new StreamReader(Request.Body, System.Text.Encoding.UTF8))
+                {
+                    string res = reader.ReadToEndAsync().Result;
+                    account = JsonConvert.DeserializeObject<Account>(res);
+                }
+
+                using(ParkAndRideContext db = new ParkAndRideContext())
+                {
+                    db.Account.Update(account);
+                    db.SaveChanges();
+                }
+                return Ok();
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e)
+            {
+                return BadRequest("Wrong body contains");
+            }
+            catch (JsonReaderException)
+            {
+                return BadRequest("Wrong body contains");
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+
+            }
+        }
+
 
         public IActionResult LoggedIn(){
 
@@ -110,8 +192,6 @@ namespace ParkAndRide.Controllers
             }
         }
 
-        // var usr = db.userAccount.Where(u => u.Username == user.Username && u.Password == user.Password).FirstOrDefault();
-
-
     }
+
 }
