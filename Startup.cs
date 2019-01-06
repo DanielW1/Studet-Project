@@ -14,6 +14,7 @@ using ParkAndRide.Models.Config;
 using Hangfire;
 using ParkAndRide.App.Requests;
 using ParkAndRide.App.ActionModel;
+using Newtonsoft.Json;
 
 namespace ParkAndRide
 {
@@ -50,7 +51,10 @@ namespace ParkAndRide
                 options.Cookie.HttpOnly = true;
             });
 
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+
             services.AddDbContext<ParkAndRideContext>
                 (options => options.UseSqlServer(Configuration.GetConnectionString("BloggingDatabase")));
 
